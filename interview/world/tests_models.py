@@ -47,5 +47,5 @@ class ModelsTestCase(TestCase):
         self.assertEqual(answer.about_yourself, 'I am John Doe.')
         self.assertEqual(answer.hear_about, 'From a friend.')
         self.assertEqual(answer.company_info, 'Good company.')
-        self.assertEqual(answer.apply_position, 'Software Engineer')
+        self.assertEqual(answer.apply_position, 'Software Engineer') 
 

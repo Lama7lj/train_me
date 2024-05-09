@@ -41,3 +41,8 @@ python manage.py runserver
 امر الفحص
 
 python manage.py test world
+
+
+
+
+#####
