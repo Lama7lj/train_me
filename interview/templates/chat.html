@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+
+<div class="container mt-5">
+    <h4 class="card-title mt-3 text-center">Suggest questions</h4>
+</div>
+
+<div class="container-fluid d-flex justify-content-center align-items-center vh-60">
+    <div class="text-center">
+        <div class="card-body">
+            <!-- <h5 class="card-title">Suggest questions</h5> -->
+            <!-- <p>{{ questions | linebreaks }}</p> -->
+
+
+            <!-- <div class="mt-3">
+                <form method="POST" action="{% url 'chat' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Suggest questions</button>
+                </form>
+            </div> -->
+
+
+
+
+            <form method="POST" action="{% url 'evaluate' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% if Question1 %}
+                <div class="form-group">
+                    <label for="Question1">{{ Question1 }}</label>
+                    <textarea name="Question1" class="form-control" placeholder="Answer for Question1" required></textarea>
+                    <input name="label1" value="{{ Question1 }}" class="form-control" placeholder="" hidden />
+                </div>
+                {% endif %}
+                <hr />
+
+                {% if Question2 %}
+                <div class="form-group">
+                    <label for="Question2">{{ Question2 }}</label>
+                    <textarea name="Question2" class="form-control" placeholder="Answer for Question2" required></textarea>
+                    <input name="label2" value="{{ Question2 }}" class="form-control" placeholder="" hidden />
+                </div>
+                {% endif %}
+                <hr />
+
+                {% if Question3 %}
+                <div class="form-group">
+                    <label for="Question3">{{ Question3 }}</label>
+                    <textarea name="Question3" class="form-control" placeholder="Answer for Question3" required></textarea>
+                    <input name="label3" value="{{ Question3 }}" class="form-control" placeholder="" hidden />
+                </div>
+                {% endif %}
+                <hr />
+
+                {% if Question4 %}
+                <div class="form-group">
+                    <label for="Question4">{{ Question4 }}</label>
+                    <textarea name="Question4" class="form-control" placeholder="Answer for Question4" required></textarea>
+                    <input name="label4" value="{{ Question4 }}" class="form-control" placeholder="" hidden />
+                </div>
+                {% endif %}
+                <button type="submit" class="btn btn-primary" id="submitBtn">Evaluate the Answer</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

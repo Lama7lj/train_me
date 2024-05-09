@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+
+<div class="container mt-5">
+    <h4 class="card-title mt-3 text-center">Suggest questions</h4>
+</div>
+
+<div class="container-fluid d-flex justify-content-center align-items-center vh-60">
+    <div class="text-center">
+        <div class="card-body">
+            <!-- <h5 class="card-title">Suggest questions</h5> -->
+             <h2>Rate For Question</h2> <p>{{ label1 }} </p>
+            <h5>  {{ rate1 }} :</h5>
+            <hr />
+
+             <h2>Rate For Question</h2> <p>{{ label2 }} is:</p>
+            <h5>  {{ rate2 }} :</h5>
+            <hr />
+
+            <h2>Rate For Question</h2> <p> {{ label3 }} is:</p>
+            <h5>  {{ rate3 }} :</h5>
+            <hr />
+
+            <h2>Rate For Question</h2> <p> {{ label4 }} is:</p>
+            <h5>  {{ rate4 }} :</h5>
+            <hr />
+            
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

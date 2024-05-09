@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="{% static 'js/home.js' %}"></script>
+
+<script>
+    var currentQuestion = 1;
+
+    function showQuestion(questionNumber) {
+        var currentQuestionDiv = document.getElementById('question-' + questionNumber);
+        var previousQuestionDiv = document.getElementById('question-' + (questionNumber - 1));
+        
+        if (previousQuestionDiv) {
+            previousQuestionDiv.style.display = 'none';
+        }
+
+        if (currentQuestionDiv) {
+            currentQuestionDiv.style.display = 'block';
+        }
+
+        if (questionNumber === 4) {
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('submitBtn').style.display = 'inline-block';
+        } else {
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            document.getElementById('submitBtn').style.display = 'none';
+        }
+    }
+
+    function nextQuestion() {
+        var currentAnswer = document.getElementById('answer-' + currentQuestion).value;
+        
+        if (currentAnswer.trim() === "") {
+            alert("Please enter your answer.");
+            return;
+        }
+        
+        currentQuestion++;
+        showQuestion(currentQuestion);
+    }
+</script>
+
+{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+
+<div class="container mt-5">
+    <h4 class="card-title mt-3 text-center">Train Me Result</h4>
+</div>
+
+<div class="container-fluid d-flex justify-content-center align-items-center vh-60">
+    <div class="text-center">
+        <div class="card-body">
+            <h5 class="card-title">Predicted Emotions</h5>
+            <ul class="list-group">
+                <li class="list-group-item">Question 1: {{ emotions.0 }}</li>
+                <li class="list-group-item">Question 2: {{ emotions.1 }}</li>
+                <li class="list-group-item">Question 3: {{ emotions.2 }}</li>
+                <li class="list-group-item">Question 4: {{ emotions.3 }}</li>
+            </ul>
+
+            <div class="mt-3">
+                <h5 class="card-title text-success">Result: Passed</h5>
+                <p class="text-muted">Congratulations! You have passed the first part of the interview.</p>
+
+
+                
+                <h5 class="card-title text-success"><a href="{% url 'chat' %}">Next Step</a></h5>
+
+                <!-- <div id="questions">
+                    <div id="question-1">
+                        <form id="form-1">
+                            <div class="form-group">
+                                <label for="answer-1">1. What is a variable?</label>
+                                <textarea class="form-control" id="answer-1" name="about_yourself" rows="3" required></textarea>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="nextQuestion()" id="nextBtn">Next</button>
+                        </form>
+                    </div>
+
+                    <div id="question-2" style="display: none;">
+                        <form id="form-2">
+                            <div class="form-group">
+                                <label for="answer-2">2. Explain the concept of inheritance in object-oriented programming?</label>
+                                <textarea class="form-control" id="answer-2" name="hear_about" rows="3" required></textarea>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="nextQuestion()" id="nextBtn">Next</button>
+                        </form>
+                    </div>
+
+                    <div id="question-3" style="display: none;">
+                        <form id="form-3">
+                            <div class="form-group">
+                                <label for="answer-3">3. What is the purpose of a primary key in a database?</label>
+                                <textarea class="form-control" id="answer-3" name="company_info" rows="3" required></textarea>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="nextQuestion()" id="nextBtn">Next</button>
+                        </form>
+                    </div>
+
+                    <div id="question-4" style="display: none;">
+                        <form id="form-4" action="{% url 'answer' %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="answer-4">4. Describe the difference between HTTP and HTTPS?</label>
+                                <textarea class="form-control" id="answer-4" name="apply_position" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">Submit Answers</button>
+                        </form>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

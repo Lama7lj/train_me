@@ -1,0 +1,43 @@
+
+-----------------مره واحده فقط عن انئشاء المشروع------------------
+***to create enviroment 
+python -m venv env
+
+
+
+
+
+
+***install library
+pip install -r requirements.txt
+
+
+
+
+----------------تشغيل المشروع----------------------
+
+
+
+تفعيل البيئة 
+بعد اختيار نوع الترمنل 
+command prompt
+
+***active the enviroment
+env\Scripts\activate
+
+
+
+
+
+***run the project 
+python manage.py runserver
+
+
+
+
+
+
+*****************************************
+امر الفحص
+
+python manage.py test world

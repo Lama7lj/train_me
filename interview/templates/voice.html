@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="{% static 'js/home.js' %}"></script>
+
+<script>
+    var currentQuestion = 1;
+    var recordingsCount = 0;
+
+    function startRecording(question, button) {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function (stream) {
+                const mediaRecorder = new MediaRecorder(stream);
+                const chunks = [];
+                let sampleRate = 44100;  // Default sample rate
+
+                mediaRecorder.ondataavailable = function (e) {
+                    chunks.push(e.data);
+                };
+
+                mediaRecorder.onstop = function (e) {
+                    const blob = new Blob(chunks, { 'type': 'audio/wav' });
+                    const formData = new FormData();
+                    formData.append('audio_data', blob, 'recorded_audio_' + question + '.wav');
+                    formData.append('question', question);
+
+                    fetch("{% url 'save_audio' %}", {
+                        method: "POST",
+                        body: formData
+                    })
+                    .then(response => response.text())
+                    .then(audioPath => {
+                        console.log("Audio saved to: " + audioPath);
+                        const recordingsDiv = document.getElementById('recordings-' + question);
+                        recordingsDiv.innerHTML = "Recorded Audio: " + audioPath;
+
+                        recordingsCount++;
+                        if (recordingsCount === 4) {
+                            document.getElementById('checkResultBtn').style.display = 'inline-block';
+                        } else {
+                            currentQuestion++;
+                            showQuestion(currentQuestion);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                };
+
+                mediaRecorder.start();
+
+                setTimeout(function () {
+                    mediaRecorder.stop();
+                    button.disabled = true;
+                    button.innerHTML = '<img src="{% static "record.png" %}" alt="Recording" style="width: 20px; height: 20px;">';
+                }, 300); // Record for 5 seconds
+            });
+    }
+
+    function showQuestion(questionNumber) {
+        var currentQuestionDiv = document.getElementById('question-' + questionNumber);
+        var previousQuestionDiv = document.getElementById('question-' + (questionNumber - 1));
+        
+        if (previousQuestionDiv) {
+            previousQuestionDiv.style.display = 'none';
+        }
+
+        if (currentQuestionDiv) {
+            currentQuestionDiv.style.display = 'block';
+        }
+    }
+</script>
+
+{% endblock %}
+
+
+
+
+{% block body %}
+{% include "navbar.html" %}
+
+<div class="container mt-5">
+    <h4 class="card-title mt-3 text-center">Train Me</h4>
+</div>
+
+<div class="container-fluid d-flex justify-content-center align-items-center vh-60">
+    <div class="text-center">
+        <div class="card-body">
+            <form method="POST" action="{% url 'prediction' %}"  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div id="questions">
+                    <div id="question-1">
+                        <div class="mt-3">
+                            <label for="record1">Question 1:</label><br />
+                            <label style="font-size: 18px;" for="record1">Can you tell me a little about yourself?</label>
+                            <button type="button" onclick="startRecording(1, this)" class="btn btn-primary mt-2" name="record_1">
+                                Record
+                                <img src="{% static 'record.png' %}" alt="Recording" style="width: 20px; height: 20px;">
+                            </button>
+                            <input type="hidden" name="audio_1" id="audio_1">
+                            <div id="recordings-1" class="mt-3"></div>
+                        </div>
+                    </div>
+                    <div id="question-2" style="display: none;">
+                        <div class="mt-3">
+                            <label for="record1">Question 2:</label><br />
+                            <label  style="font-size: 18px;" for="record2">How did you hear about the position?</label>
+                            <button type="button" onclick="startRecording(2, this)" class="btn btn-primary mt-2" name="record_2">
+                                Record
+                                <img src="{% static "record.png" %}" alt="Recording" style="width: 20px; height: 20px;">
+                            </button>
+                            <input type="hidden" name="audio_2" id="audio_2">
+                            <div id="recordings-2" class="mt-3"></div>
+                        </div>
+                    </div>
+                    <div id="question-3" style="display: none;">
+                        <div class="mt-3">
+                            <label for="record1">Question 3:</label><br />
+                            <label  style="font-size: 18px;" for="record3">What do you know about our company?</label>
+                            <button type="button" onclick="startRecording(3, this)" class="btn btn-primary mt-2" name="record_3">
+                                Record
+                                <img src="{% static "record.png" %}" alt="Recording" style="width: 20px; height: 20px;">
+                            </button>
+                            <input type="hidden" name="audio_3" id="audio_3">
+                            <div id="recordings-3" class="mt-3"></div>
+                        </div>
+                    </div>
+                    <div id="question-4" style="display: none;">
+                        <div class="mt-3">
+                            <label for="record1">Question 4:</label><br />
+                            <label  style="font-size: 18px;" for="record4">Why did you apply for this position?</label>
+                            <button type="button" onclick="startRecording(4, this)" class="btn btn-primary mt-2" name="record_4">
+                                Record
+                                <img src="{% static "record.png" %}" alt="Recording" style="width: 20px; height: 20px;">
+                            </button>
+                            <input type="hidden" name="audio_4" id="audio_4">
+                            <div id="recordings-4" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" id="checkResultBtn" class="btn btn-outline-primary" style="display:none;">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

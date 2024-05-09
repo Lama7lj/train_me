@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+
+<div class="container mt-5">
+    <h4 class="card-title mt-3 text-center">Train Me Result</h4>
+</div>
+
+<div class="container-fluid d-flex justify-content-center align-items-center vh-60">
+    <div class="text-center">
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">Question 1: {{ emotions.0 }}</li>
+                <li class="list-group-item">Question 2: {{ emotions.1 }}</li>
+                <li class="list-group-item">Question 3: {{ emotions.2 }}</li>
+                <li class="list-group-item">Question 4: {{ emotions.3 }}</li>
+            </ul>
+            <div class="mt-3">
+                <h5 class="card-title text-danger">Result: Not Passed</h5>
+                <p class="text-muted">You did not meet the required emotional criteria for passing the interview.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
